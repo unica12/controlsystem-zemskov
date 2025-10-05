@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16
+    container_name: control_system_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: control_system
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: control_system_backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "4000:3000"  # <-- добавлен проброс порта для сервера
+
+volumes:
+  db_data:
