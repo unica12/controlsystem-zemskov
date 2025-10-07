@@ -11,6 +11,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Пользователь уже существует' });
     }
 
+    // Хэширование удалено, делается в модели
     const user = await User.create({
       username,
       email,
